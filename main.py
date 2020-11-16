@@ -51,7 +51,8 @@ class App:
         self.optButton1.grid(column=3, row=1, padx=20, pady=5)
 
         self.applyBind1 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
-                                    command=lambda: self.applyMacro(1, variable=self.buttonType1))
+                                    command=lambda: self.applyMacro(self.buttonType1, self.bindEntry1, self.cpsEntry1,
+                                                                    self.timeEntry1))
         self.applyBind1.config(font=("Segoe UI", 12))
         self.applyBind1.grid(column=4, row=1, padx=20, pady=5)
 
@@ -72,12 +73,38 @@ class App:
 
         self.optButton2 = tk.OptionMenu(self.window, self.buttonType2, *OptionList)
         self.optButton2.config(font=("Segoe UI", 12), width=10, fg='white', bg='black')
-        self.optButton2.grid(column=3, row=2, padx=20)
+        self.optButton2.grid(column=3, row=2, padx=20, pady=5)
 
         self.applyBind2 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
-                                    command=lambda: self.applyMacro(2, variable=self.buttonType2))
+                                    command=lambda: self.applyMacro(self.buttonType2, self.bindEntry2, self.cpsEntry2,
+                                                                    self.timeEntry2))
         self.applyBind2.config(font=("Segoe UI", 12))
         self.applyBind2.grid(column=4, row=2, padx=20, pady=5)
+
+        self.cpsEntry3 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.cpsEntry3.config(font=("Segoe UI", 12))
+        self.cpsEntry3.grid(column=0, row=3, padx=20, pady=5)
+
+        self.timeEntry3 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.timeEntry3.config(font=("Segoe UI", 12))
+        self.timeEntry3.grid(column=1, row=3, padx=20, pady=5)
+
+        self.bindEntry3 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.bindEntry3.config(font=("Segoe UI", 12))
+        self.bindEntry3.grid(column=2, row=3, padx=20, pady=5)
+
+        self.buttonType3 = tk.StringVar(self.window)
+        self.buttonType3.set(OptionList[0])
+
+        self.optButton3 = tk.OptionMenu(self.window, self.buttonType3, *OptionList)
+        self.optButton3.config(font=("Segoe UI", 12), width=10, fg='white', bg='black')
+        self.optButton3.grid(column=3, row=3, padx=20, pady=5)
+
+        self.applyBind3 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
+                                    command=lambda: self.applyMacro(self.buttonType3, self.bindEntry3, self.cpsEntry3,
+                                                                    self.timeEntry3))
+        self.applyBind3.config(font=("Segoe UI", 12))
+        self.applyBind3.grid(column=4, row=3, padx=20, pady=5)
 
         self.window.mainloop()
 
@@ -89,31 +116,18 @@ class App:
                 mouse.click(bt, 1)
                 time.sleep(1 / click_count)
 
-    def applyMacro(self, macroNumber, variable):
-
-
+    def applyMacro(self, variable, bindEntry, cpsEntry, timeEntry):
         index = 0
         for i in OptionList:
             if str(i) == variable.get():
                 index = OptionList.index(i)
+        try:
+            keyboard.remove_hotkey(bindEntry.get())
+        except:
+            print("")
 
-        if macroNumber == 1:
-            try:
-                keyboard.remove_hotkey(self.bindEntry1.get())
-            except:
-                print("")
-            keyboard.add_hotkey(self.bindEntry1.get(),
-                                callback=lambda: self.mouseMacro(int(self.cpsEntry1.get()), int(self.timeEntry1.get()),
-                                                                 OptionList[index]))
-        elif macroNumber == 2:
-            try:
-                keyboard.remove_hotkey(self.bindEntry2.get())
-            except:
-                print("")
-
-            keyboard.add_hotkey(self.bindEntry2.get(),
-                                callback=lambda: self.mouseMacro(int(self.cpsEntry2.get()), int(self.timeEntry2.get()),
-                                                                 OptionList[index]))
+        keyboard.add_hotkey(bindEntry.get(), callback=lambda: self.mouseMacro(int(cpsEntry.get()), int(timeEntry.get()),
+                                                                              OptionList[index]))
 
 
 app = App()
