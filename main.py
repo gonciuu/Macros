@@ -14,45 +14,46 @@ class App:
         self.window.title("Macro")
         self.window.geometry("1000x580")
 
-        self.macroButton = tk.Button(master=self.window, text="15 cps macro (10 sec) [v] - pvp", command=lambda: self.mouseMacro(15, 10, Button.left))
-        self.macroButton.config(font=("Segoe UI", 18))
-        self.macroButton.grid(column=0, row=0)
+        self.title = tk.Label(master=self.window, text="CPS", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=0, row=0, padx=20)
 
-        self.macroButton2 = tk.Button(master=self.window, text="20 cps macro (10 sec) [b] - pvp", command=lambda: self.mouseMacro(20, 10, Button.left))
-        self.macroButton2.config(font=("Segoe UI", 18))
-        self.macroButton2.grid(column=0, row=1)
+        self.cpsEntry1 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.cpsEntry1.config(font=("Segoe UI", 12))
+        self.cpsEntry1.grid(column=0, row=1, padx=20)
 
-        self.macroButton3 = tk.Button(master=self.window, text="30 cps macro (10 sec) [alt+b] - pvp", command=lambda: self.mouseMacro(30, 10, Button.left))
-        self.macroButton3.config(font=("Segoe UI", 18))
-        self.macroButton3.grid(column=0, row=2)
+        self.title = tk.Label(master=self.window, text="TIME", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=1, row=0, padx=20)
 
-        keyboard.add_hotkey('v', callback=lambda: self.mouseMacro(15, 10, Button.left))
-        keyboard.add_hotkey('b', callback=lambda: self.mouseMacro(20, 10, Button.left))
-        keyboard.add_hotkey('alt+b', callback=lambda: self.mouseMacro(30, 10, Button.left))
+        self.timeEntry1 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.timeEntry1.config(font=("Segoe UI", 12))
+        self.timeEntry1.grid(column=1, row=1, padx=20)
 
-        self.macroButton = tk.Button(master=self.window, text="15 cps macro (10 sec) [~] - building", command=lambda: self.mouseMacro(15, 10, Button.right))
-        self.macroButton.config(font=("Segoe UI", 18))
-        self.macroButton.grid(column=1, row=0)
+        self.title = tk.Label(master=self.window, text="BIND", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=2, row=0, padx=20)
 
-        self.macroButton2 = tk.Button(master=self.window, text="20 cps macro (10 sec) [shift+2] - building", command=lambda: self.mouseMacro(20, 10, Button.right))
-        self.macroButton2.config(font=("Segoe UI", 18))
-        self.macroButton2.grid(column=1, row=1)
+        self.bindEntry1 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.bindEntry1.config(font=("Segoe UI", 12))
+        self.bindEntry1.grid(column=2, row=1, padx=20)
 
-        self.macroButton3 = tk.Button(master=self.window, text="30 cps macro (10 sec) [shift+3] - building", command=lambda: self.mouseMacro(30, 10, Button.right))
-        self.macroButton3.config(font=("Segoe UI", 18))
-        self.macroButton3.grid(column=1, row=2)
+        self.applyBind1 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply", command=lambda: self.applyMacro(1))
+        self.applyBind1.config(font=("Segoe UI", 12))
+        self.applyBind1.grid(column=3, row=1, padx=20)
 
-        keyboard.add_hotkey('~', callback=lambda: self.mouseMacro(15, 10, Button.right))
-        keyboard.add_hotkey('shift+2', callback=lambda: self.mouseMacro(20, 10, Button.right))
-        keyboard.add_hotkey('shift+3', callback=lambda: self.mouseMacro(30, 10, Button.right))
         self.window.mainloop()
 
-    def mouseMacro(self,  click_count, duration, bt):
+    @staticmethod
+    def mouseMacro(click_count, duration, bt):
         time.sleep(2)
         for x in range(duration):
             for y in range(click_count):
                 mouse.click(bt, 1)
-                time.sleep(1/click_count)
+                time.sleep(1 / click_count)
 
+    def applyMacro(self, macroNumber):
+        if macroNumber == 1:
+            keyboard.add_hotkey(self.bindEntry1.get(), callback=lambda: self.mouseMacro(int(self.cpsEntry1.get()), int(self.timeEntry1.get()), Button.left))
 
 app = App()
