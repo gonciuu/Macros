@@ -3,6 +3,7 @@ from pynput.mouse import Button, Controller
 import time
 import keyboard
 import mouse as control_mouse
+import threading
 
 mouse = Controller()
 
@@ -15,7 +16,10 @@ OptionList = [
 class App:
 
     def __init__(self):
-        self.applyInfiniteMacro()
+
+        self.isInfiniteMacroEnable = 1
+        self.setClicks()
+
         self.window = tk.Tk()
         self.window.configure(bg='black')
         self.window.title("Macro")
@@ -131,11 +135,16 @@ class App:
         keyboard.add_hotkey(bindEntry.get(), callback=lambda: self.mouseMacro(int(cpsEntry.get()), int(timeEntry.get()),
                                                                               OptionList[index]))
 
-    def applyInfiniteMacro(self):
-        control_mouse.on_click(callback=lambda: print('xd'), args=[])
-        control_mouse.on_right_click(callback=lambda: print('xd1'), args=[])
-        control_mouse.on_middle_click(callback=lambda: print('xd2'), args=[])
+    def setClicks(self):
+        control_mouse.on_middle_click(callback=lambda: self.stopInfiniteMacro(), args=())
+        control_mouse.on_right_click(callback=lambda: self.startInfiniteMacro(), args=())
 
+    def startInfiniteMacro(self):
+        if self.isInfiniteMacroEnable == 1:
+            mouse.click(Button.left, 1)
+            threading.Timer(1.0, self.startInfiniteMacro).start()
 
+    def stopInfiniteMacro(self):
+        self.isInfiniteMacroEnable = 0
 
 app = App()
