@@ -2,6 +2,7 @@ import tkinter as tk
 from pynput.mouse import Button, Controller
 import time
 import keyboard
+import mouse as control_mouse
 
 mouse = Controller()
 
@@ -14,6 +15,7 @@ OptionList = [
 class App:
 
     def __init__(self):
+        self.applyInfiniteMacro()
         self.window = tk.Tk()
         self.window.configure(bg='black')
         self.window.title("Macro")
@@ -110,7 +112,7 @@ class App:
 
     @staticmethod
     def mouseMacro(click_count, duration, bt):
-        time.sleep(2)
+        time.sleep(1)
         for x in range(duration):
             for y in range(click_count):
                 mouse.click(bt, 1)
@@ -128,6 +130,12 @@ class App:
 
         keyboard.add_hotkey(bindEntry.get(), callback=lambda: self.mouseMacro(int(cpsEntry.get()), int(timeEntry.get()),
                                                                               OptionList[index]))
+
+    def applyInfiniteMacro(self):
+        control_mouse.on_click(callback=lambda: print('xd'), args=[])
+        control_mouse.on_right_click(callback=lambda: print('xd1'), args=[])
+        control_mouse.on_middle_click(callback=lambda: print('xd2'), args=[])
+
 
 
 app = App()
