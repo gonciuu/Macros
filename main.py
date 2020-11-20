@@ -4,6 +4,7 @@ import time
 import keyboard
 import mouse as control_mouse
 import threading
+import json
 
 mouse = Controller()
 
@@ -58,7 +59,7 @@ class App:
 
         self.applyBind1 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
                                     command=lambda: self.applyMacro(self.buttonType1, self.bindEntry1, self.cpsEntry1,
-                                                                    self.timeEntry1))
+                                                                    self.timeEntry1, 0))
         self.applyBind1.config(font=("Segoe UI", 12))
         self.applyBind1.grid(column=4, row=1, padx=20, pady=5)
 
@@ -83,7 +84,7 @@ class App:
 
         self.applyBind2 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
                                     command=lambda: self.applyMacro(self.buttonType2, self.bindEntry2, self.cpsEntry2,
-                                                                    self.timeEntry2))
+                                                                    self.timeEntry2, 1))
         self.applyBind2.config(font=("Segoe UI", 12))
         self.applyBind2.grid(column=4, row=2, padx=20, pady=5)
 
@@ -108,7 +109,7 @@ class App:
 
         self.applyBind3 = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
                                     command=lambda: self.applyMacro(self.buttonType3, self.bindEntry3, self.cpsEntry3,
-                                                                    self.timeEntry3))
+                                                                    self.timeEntry3, 2))
         self.applyBind3.config(font=("Segoe UI", 12))
         self.applyBind3.grid(column=4, row=3, padx=20, pady=5)
 
@@ -134,7 +135,7 @@ class App:
                 mouse.click(bt, 1)
                 time.sleep(1 / click_count)
 
-    def applyMacro(self, variable, bindEntry, cpsEntry, timeEntry):
+    def applyMacro(self, variable, bindEntry, cpsEntry, timeEntry, nb):
         index = 0
         for i in OptionList:
             if str(i) == variable.get():
@@ -146,6 +147,7 @@ class App:
 
         keyboard.add_hotkey(bindEntry.get(), callback=lambda: self.mouseMacro(int(cpsEntry.get()), int(timeEntry.get()),
                                                                               OptionList[index]))
+        self.updateJSONData(nb, int(cpsEntry.get()), int(timeEntry.get()), bindEntry.get())
 
     def setClicks(self):
         control_mouse.on_middle_click(callback=lambda: self.startInfiniteMacroClicks(), args=())
@@ -162,6 +164,31 @@ class App:
 
     def stopInfiniteMacro(self):
         self.isInfiniteMacroEnable = 0
+
+    def updateJSONData(self, index, cps, duration, bind):
+        try:
+            with open('macros.txt') as json_file:
+                data = json.load(json_file)
+        except:
+            data = {}
+            data['bindMacros'] = [{}, {}, {}]
+        data['bindMacros'][index] = {
+            'cps': cps,
+            'time': duration,
+            'bind': bind,
+        }
+        with open('macros.txt', 'w') as outfile:
+            json.dump(data, outfile)
+
+
+    def readJSONData(self):
+        with open('data.txt') as json_file:
+            data = json.load(json_file)
+            for p in data['people']:
+                print('Name: ' + p['name'])
+                print('Website: ' + p['website'])
+                print('From: ' + p['from'])
+                print('')
 
 
 app = App()
