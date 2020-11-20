@@ -171,8 +171,7 @@ class App:
             with open('macros.txt') as json_file:
                 data = json.load(json_file)
         except:
-            data = {}
-            data['bindMacros'] = [{}, {}, {}]
+            data = self.setInitialValues()
 
         data['bindMacros'][index] = {
             'cps': cps,
@@ -187,13 +186,41 @@ class App:
         timeInputs = [self.timeEntry1, self.timeEntry2, self.timeEntry3]
         bindInputs = [self.bindEntry1, self.bindEntry2, self.bindEntry3]
 
-        with open('macros.txt') as json_file:
-            data = json.load(json_file)
-            macros = data['bindMacros']
-            for x in range(0, len(macros)):
-                cpsInputs[x].insert(0, macros[x]['cps'])
-                timeInputs[x].insert(0, macros[x]['time'])
-                bindInputs[x].insert(0, macros[x]['bind'])
+        try:
+            with open('macros.txt') as json_file:
+                data = json.load(json_file)
+                macros = data['bindMacros']
+                for x in range(0, len(macros)):
+                    try:
+                        cpsInputs[x].insert(0, macros[x]['cps'])
+                        timeInputs[x].insert(0, macros[x]['time'])
+                        bindInputs[x].insert(0, macros[x]['bind'])
+                    except:
+                        cpsInputs[x].insert(0, "")
+                        timeInputs[x].insert(0, "")
+                        bindInputs[x].insert(0, "")
+        except:
+            data = self.setInitialValues()
+            with open('macros.txt', 'w') as outfile:
+                json.dump(data, outfile)
+            self.readJSONData()
+
+    @staticmethod
+    def setInitialValues():
+        return {'bindMacros': [{
+            'cps': 30,
+            'time': 10,
+            'bind': "ctrl+c",
+        }, {
+            'cps': 30,
+            'time': 10,
+            'bind': "v",
+        }, {
+            'cps': 30,
+            'time': 10,
+            'bind': "n",
+        }]}
+
 
 
 app = App()
