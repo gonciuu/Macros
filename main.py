@@ -148,7 +148,7 @@ class App:
 
         keyboard.add_hotkey(bindEntry.get(), callback=lambda: self.mouseMacro(int(cpsEntry.get()), int(timeEntry.get()),
                                                                               OptionList[index]))
-        self.updateJSONData(nb, int(cpsEntry.get()), int(timeEntry.get()), bindEntry.get())
+        self.updateJSONData(nb, int(cpsEntry.get()), int(timeEntry.get()), bindEntry.get(), OptionList[index])
 
     def setClicks(self):
         control_mouse.on_middle_click(callback=lambda: self.startInfiniteMacroClicks(), args=())
@@ -166,7 +166,7 @@ class App:
     def stopInfiniteMacro(self):
         self.isInfiniteMacroEnable = 0
 
-    def updateJSONData(self, index, cps, duration, bind):
+    def updateJSONData(self, index, cps, duration, bind, mouseButton):
         try:
             with open('macros.txt') as json_file:
                 data = json.load(json_file)
@@ -177,6 +177,7 @@ class App:
             'cps': cps,
             'time': duration,
             'bind': bind,
+            'buttonType': str(mouseButton)
         }
         with open('macros.txt', 'w') as outfile:
             json.dump(data, outfile)
@@ -185,6 +186,7 @@ class App:
         cpsInputs = [self.cpsEntry1, self.cpsEntry2, self.cpsEntry3]
         timeInputs = [self.timeEntry1, self.timeEntry2, self.timeEntry3]
         bindInputs = [self.bindEntry1, self.bindEntry2, self.bindEntry3]
+        mouseButtons = [self.buttonType1, self.buttonType2, self.buttonType3]
 
         try:
             with open('macros.txt') as json_file:
@@ -195,10 +197,22 @@ class App:
                         cpsInputs[x].insert(0, macros[x]['cps'])
                         timeInputs[x].insert(0, macros[x]['time'])
                         bindInputs[x].insert(0, macros[x]['bind'])
+                        if macros[x]['buttonType'] == 'Button.left':
+                            mouseButtons[x].set(OptionList[0])
+                        else:
+                            mouseButtons[x].set(OptionList[1])
+
                     except:
                         cpsInputs[x].insert(0, "")
                         timeInputs[x].insert(0, "")
                         bindInputs[x].insert(0, "")
+                        
+            self.applyMacro(self.buttonType1, self.bindEntry1, self.cpsEntry1,
+                            self.timeEntry1, 0)
+            self.applyMacro(self.buttonType2, self.bindEntry2, self.cpsEntry2,
+                            self.timeEntry2, 1)
+            self.applyMacro(self.buttonType3, self.bindEntry3, self.cpsEntry3,
+                            self.timeEntry3, 2)
         except:
             data = self.setInitialValues()
             with open('macros.txt', 'w') as outfile:
@@ -211,16 +225,18 @@ class App:
             'cps': 30,
             'time': 10,
             'bind': "ctrl+c",
+            'buttonType': "Button.left"
         }, {
             'cps': 30,
             'time': 10,
             'bind': "v",
+            'buttonType': "Button.right"
         }, {
             'cps': 30,
             'time': 10,
             'bind': "n",
+            'buttonType': "Button.left"
         }]}
-
 
 
 app = App()
