@@ -112,6 +112,18 @@ class App:
         self.applyBind3.config(font=("Segoe UI", 12))
         self.applyBind3.grid(column=4, row=3, padx=20, pady=5)
 
+        self.title = tk.Label(master=self.window, text="INFINITE MACRO", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=1, row=5, padx=20, pady=(20, 0))
+
+        self.title = tk.Label(master=self.window, text="CPS", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=0, row=6, padx=20, pady=10)
+
+        self.infiniteCpsEntry1 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.infiniteCpsEntry1.config(font=("Segoe UI", 12))
+        self.infiniteCpsEntry1.grid(column=0, row=7, padx=20, pady=5)
+
         self.window.mainloop()
 
     @staticmethod
@@ -136,15 +148,20 @@ class App:
                                                                               OptionList[index]))
 
     def setClicks(self):
-        control_mouse.on_middle_click(callback=lambda: self.stopInfiniteMacro(), args=())
-        control_mouse.on_right_click(callback=lambda: self.startInfiniteMacro(), args=())
+        control_mouse.on_middle_click(callback=lambda: self.startInfiniteMacroClicks(), args=())
+        control_mouse.on_right_click(callback=lambda: self.stopInfiniteMacro(), args=())
 
-    def startInfiniteMacro(self):
+    def startInfiniteMacroClicks(self):
+        self.isInfiniteMacroEnable = 1
+        self.startInfiniteMacro(int(self.infiniteCpsEntry1.get()))
+
+    def startInfiniteMacro(self, cps):
         if self.isInfiniteMacroEnable == 1:
-            mouse.click(Button.left, 1)
-            threading.Timer(1.0, self.startInfiniteMacro).start()
+            control_mouse.click('left')
+            threading.Timer(1 / cps, lambda: self.startInfiniteMacro(cps)).start()
 
     def stopInfiniteMacro(self):
         self.isInfiniteMacroEnable = 0
+
 
 app = App()
