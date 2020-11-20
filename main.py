@@ -119,11 +119,15 @@ class App:
 
         self.title = tk.Label(master=self.window, text="CPS", bg='black', fg='white')
         self.title.config(font=("Segoe UI", 15))
-        self.title.grid(column=0, row=6, padx=20, pady=10)
+        self.title.grid(column=1, row=6, padx=20, pady=10)
 
         self.infiniteCpsEntry1 = tk.Entry(master=self.window, width=10, bg='black', fg='white')
         self.infiniteCpsEntry1.config(font=("Segoe UI", 12))
-        self.infiniteCpsEntry1.grid(column=0, row=7, padx=20, pady=5)
+        self.infiniteCpsEntry1.grid(column=1, row=7, padx=20, pady=5)
+        self.applyInfiniteMacroButton = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
+                                                  command=lambda: self.applyInfiniteMacro())
+        self.applyInfiniteMacroButton.config(font=("Segoe UI", 12))
+        self.applyInfiniteMacroButton.grid(column=1, row=8, padx=20, pady=5)
 
         self.readJSONData()
         self.window.mainloop()
@@ -206,13 +210,14 @@ class App:
                         cpsInputs[x].insert(0, "")
                         timeInputs[x].insert(0, "")
                         bindInputs[x].insert(0, "")
-                        
+
             self.applyMacro(self.buttonType1, self.bindEntry1, self.cpsEntry1,
                             self.timeEntry1, 0)
             self.applyMacro(self.buttonType2, self.bindEntry2, self.cpsEntry2,
                             self.timeEntry2, 1)
             self.applyMacro(self.buttonType3, self.bindEntry3, self.cpsEntry3,
                             self.timeEntry3, 2)
+            self.infiniteCpsEntry1.insert(0, data['infiniteMacroCPS'])
         except:
             data = self.setInitialValues()
             with open('macros.txt', 'w') as outfile:
@@ -236,7 +241,19 @@ class App:
             'time': 10,
             'bind': "n",
             'buttonType': "Button.left"
-        }]}
+        }], 'infiniteMacroCPS': 20}
+
+    def applyInfiniteMacro(self):
+        try:
+            with open('macros.txt') as json_file:
+                data = json.load(json_file)
+        except:
+            data = self.setInitialValues()
+
+        data['infiniteMacroCPS'] = int(self.infiniteCpsEntry1.get())
+       
+        with open('macros.txt', 'w') as outfile:
+            json.dump(data, outfile)
 
 
 app = App()

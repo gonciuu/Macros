@@ -1,1 +1,1 @@
-{"bindMacros": [{"cps": 30, "time": 10, "bind": "ctrl+c", "buttonType": "Button.right"}, {"cps": 30, "time": 10, "bind": "v", "buttonType": "Button.right"}, {"cps": 30, "time": 10, "bind": "n", "buttonType": "Button.right"}]}
+{"bindMacros": [{"cps": 30, "time": 10, "bind": "ctrl+c", "buttonType": "Button.left"}, {"cps": 30, "time": 10, "bind": "v", "buttonType": "Button.right"}, {"cps": 30, "time": 10, "bind": "n", "buttonType": "Button.left"}], "infiniteMacroCPS": 12}
