@@ -125,6 +125,7 @@ class App:
         self.infiniteCpsEntry1.config(font=("Segoe UI", 12))
         self.infiniteCpsEntry1.grid(column=0, row=7, padx=20, pady=5)
 
+        self.readJSONData()
         self.window.mainloop()
 
     @staticmethod
@@ -172,6 +173,7 @@ class App:
         except:
             data = {}
             data['bindMacros'] = [{}, {}, {}]
+
         data['bindMacros'][index] = {
             'cps': cps,
             'time': duration,
@@ -180,15 +182,18 @@ class App:
         with open('macros.txt', 'w') as outfile:
             json.dump(data, outfile)
 
-
     def readJSONData(self):
-        with open('data.txt') as json_file:
+        cpsInputs = [self.cpsEntry1, self.cpsEntry2, self.cpsEntry3]
+        timeInputs = [self.timeEntry1, self.timeEntry2, self.timeEntry3]
+        bindInputs = [self.bindEntry1, self.bindEntry2, self.bindEntry3]
+
+        with open('macros.txt') as json_file:
             data = json.load(json_file)
-            for p in data['people']:
-                print('Name: ' + p['name'])
-                print('Website: ' + p['website'])
-                print('From: ' + p['from'])
-                print('')
+            macros = data['bindMacros']
+            for x in range(0, len(macros)):
+                cpsInputs[x].insert(0, macros[x]['cps'])
+                timeInputs[x].insert(0, macros[x]['time'])
+                bindInputs[x].insert(0, macros[x]['bind'])
 
 
 app = App()
