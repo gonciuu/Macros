@@ -10,4 +10,4 @@ A Few resources to get when you start write your first project in python:
 
 <br><br>
 
-<img src="macros.PNG", width="40%"/>
+<img src="macros.PNG" width="40%">
