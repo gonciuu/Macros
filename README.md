@@ -2,7 +2,7 @@
 
 #### Desktop app which helps you to set practically infinite no. CPS on your mouse without any mouse software
 
-<br><br>
+<br>
 
 A Few resources to get when you start write your first project in python:
 - [Tkinter Desktop UI Library Documentation](https://docs.python.org/3/library/tk.html)
@@ -10,4 +10,4 @@ A Few resources to get when you start write your first project in python:
 
 <br><br>
 
-<img src="macros.PNG" width="80%">
+<img src="macros.PNG">
