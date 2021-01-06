@@ -129,6 +129,23 @@ class App:
         self.applyInfiniteMacroButton.config(font=("Segoe UI", 12))
         self.applyInfiniteMacroButton.grid(column=1, row=8, padx=20, pady=5)
 
+        self.title = tk.Label(master=self.window, text="NINJA BRIDGE", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=3, row=5, padx=20, pady=(20, 0))
+
+        self.title = tk.Label(master=self.window, text="BIND", bg='black', fg='white')
+        self.title.config(font=("Segoe UI", 15))
+        self.title.grid(column=3, row=6, padx=20, pady=(10, 0))
+
+        self.ninjaBridgeEntry = tk.Entry(master=self.window, width=10, bg='black', fg='white')
+        self.ninjaBridgeEntry.config(font=("Segoe UI", 12))
+        self.ninjaBridgeEntry.grid(column=3, row=7, padx=20, pady=5)
+
+        self.applyNinjaBridgeButton = tk.Button(master=self.window, width=10, bg='black', fg='white', text="Apply",
+                                                command=self.applyNinjaBridge)
+        self.applyNinjaBridgeButton.config(font=("Segoe UI", 12))
+        self.applyNinjaBridgeButton.grid(column=3, row=8, padx=20, pady=5)
+
         self.readJSONData()
         self.window.mainloop()
 
@@ -251,9 +268,22 @@ class App:
             data = self.setInitialValues()
 
         data['infiniteMacroCPS'] = int(self.infiniteCpsEntry1.get())
-       
+
         with open('macros.txt', 'w') as outfile:
             json.dump(data, outfile)
+
+    def applyNinjaBridge(self):
+        keyboard.add_hotkey(self.ninjaBridgeEntry.get(), callback=lambda: self.ninjaBridge())
+
+    def ninjaBridge(self):
+        keyboard.press('s')
+        for i in range(1, 20):
+            keyboard.press('shift')
+            #mouse.click(Button.right, 1)
+            time.sleep(0.30)
+            keyboard.release('shift')
+            time.sleep(0.165)
+        keyboard.release('s')
 
 
 app = App()
